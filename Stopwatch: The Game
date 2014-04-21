@@ -1,0 +1,124 @@
+# template for "Stopwatch: The Game"
+
+import simplegui
+
+# define global variables
+counter_add = 0
+output = "0:00.0"
+string = "0/0"
+Second_counter = 0
+Minute_counter = 0
+Tenth_Second_counter = 0
+game_times = 0
+win_times =0
+
+
+
+# define helper function format that converts time
+# in tenths of seconds into formatted string A:BC.D
+def format(t):
+    global output, Second_counter
+    global Minute_counter, Tenth_Second_counter
+#    if t < 0:
+#       return "Wrong iput!"
+#    else:
+        
+    input_tmp = int(t) % 600
+    Minute_counter = int(t) / 600
+    Second_counter = input_tmp / 10
+    Tenth_Second_counter = input_tmp - Second_counter * 10
+    
+        #input_tmp =    
+        #print Minute_counter
+        #print Second_counter
+        #print Tenth_Second_counter
+        #print output 
+        #str1 = str(Second_counter)
+        #str1 = str(Minute_counter)
+        #print ""
+
+    return 
+
+   
+# define event handlers for buttons; "Start", "Stop", "Reset"
+def Start_handle():
+    timer.start()
+    format(counter_add)
+    
+    
+    return
+
+def  Stop_handle():
+    global game_times	,win_times
+    if(timer.is_running()):
+        timer.stop()
+        game_times = game_times + 1
+        #print game_times
+     
+    if (Tenth_Second_counter == 0) and (counter_add > 0):
+        win_times = win_times + 1
+        #print win_times
+   
+        
+    #format(counter_add)
+    
+
+def Reset_handle():
+    global start_flag, stop_flag, counter_add
+    start_flag = 0
+    stop_flag = 0
+     
+    timer.stop()
+    counter_add = 0
+    #format(counter_add)
+
+# define event handler for timer with 0.1 sec interval
+def counter_handle():
+    global counter_add 
+    counter_add =counter_add +1
+    #draw_time
+    #print counter_add
+    
+#def win_game():
+#    if (not timer.is_running())and (Tenth_Second_counter == 0) and (counter_add > 0):
+#        print "OK"
+    
+
+#define draw handler
+def draw_time(canvas):
+    global output, Second_counter, counter_add
+    global Minute_counter, Tenth_Second_counter
+    
+    format(counter_add)
+    if Second_counter < 10:
+        output = str(Minute_counter) + ':0' + str(Second_counter) + "." + str(Tenth_Second_counter)
+    elif Second_counter >= 10:
+        output = str(Minute_counter) + ':' + str(Second_counter) + "." + str(Tenth_Second_counter)
+    canvas.draw_text(output, (140, 110), 45, 'White')
+    string = str(win_times) + "/" +str(game_times)
+    canvas.draw_text(string, (25, 25), 25, 'White')
+
+
+
+    
+    
+    
+        
+    
+# create frame
+frame = simplegui.create_frame("Home", 400, 200)
+
+
+# register event handlers
+timer = simplegui.create_timer(100, counter_handle)
+label = frame.add_label("Stopwatch: The Game")
+frame.add_button("Start", Start_handle, 100)
+frame.add_button("Stop", Stop_handle, 100)
+frame.add_button("Reset", Reset_handle, 100)
+
+frame.set_draw_handler(draw_time)
+frame.start()
+
+
+
+# Please remember to review the grading rubric
